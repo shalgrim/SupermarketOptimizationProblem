@@ -10,13 +10,11 @@ class GenArgParser(argparse.ArgumentParser):
         argparse.ArgumentParser.__init__(self, **kwargs)
 
         self.add_argument('-o', '--outfile', action='store', type=str,
-                          help='output filename [default: dout]')
+                          default=r'out\out',
+                          help='output filename [default: out\out]')
         self.add_argument('-l', '--logfile', action='store', type=str,
                           help='log filename [default: C:\tmp\pylog]',
                           default=r'C:\tmp\pylog')
-        self.add_argument('-w', '--workdir', action='store', type=str,
-                          help='working directory [default: C:\tmp\pywork\]',
-                          default=r'C:\tmp\pywork')
         self.add_argument('-m', '--logmode', action='store', type=str,
                           help='logging mode: [w]rite, [a]ppend [default: a]',
                           default='a')
