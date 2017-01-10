@@ -19,7 +19,7 @@ class GenArgParser(argparse.ArgumentParser):
                           help='logging mode: [w]rite, [a]ppend [default: a]',
                           default='a')
         self.add_argument('-v', '--loglevel', action='store', type=int,
-                          help='Python logging level', default=logging.WARNING)
+                          help='Python logging level', default=logging.INFO)
         self.add_argument('-t', '--testmode', action='store_true',
                           help='turns on test mode', default=False)
 
