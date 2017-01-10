@@ -5,7 +5,7 @@ Given a file where each line represents a transaction consisting of a
 whitespace-separated list of item numbers, produce an output file whose lines
 are formatted as:
 
-<item set size (N)>, <co-occurrence frequency>, <item 1 id >, <item 2 id>, …. <item N id>
+<item set size (N)>, <co-occurrence frequency>, <item 1 id >, <item 2 id>, ... <item N id>
 
 N is currently fixed at 3, but is easily parameterizable
 
@@ -24,7 +24,7 @@ from my.myargparse import GenArgParser
 from my.mylogging import config_root_file_logger
 
 N = 3       # "groups of N items appearing sigma or more times together"
-logger = logging.getLogger('supermarket_optimization.optimize')
+logger = logging.getLogger('supermarket_optimization.gen_assoc_rules')
 
 if __name__ == '__main__':
     # get command line options
@@ -47,7 +47,8 @@ if __name__ == '__main__':
     # TODO: Change so it works on a file where not all lines are sorted
     # (ie, sets instead of tuples)
     counts = Counter()
-    for line in lines:
+    for i, line in enumerate(lines):
+        if i%1000 == 0: logger.info('processing line {}'.format(i))
         items = line.strip().split()
         int_items = [int(i) for i in items]
         assert sorted(int_items) == int_items, \
@@ -64,13 +65,25 @@ if __name__ == '__main__':
     sigma_counts = {k:v for k, v in counts.items() if v >= opts.sigma}
 
     # create output
+    # <item set size (N)>, <co-occurrence frequency>, <item 1 id >, <item 2 id>, ... <item N id>
+
     outlines = []
     for k, v in sigma_counts.items():
-        # <item set size (N)>, <co-occurrence frequency>, <item 1 id >, <item 2 id>, …. <item N id>
-        outlines.append('{}\n'.format(','.join([str(N), str(v), *k])))
+        # TODO: Make code detect python 2 v 3
+
+        # python 3:
+        #outlines.append('{}\n'.format(','.join([str(N), str(v), *k])))
+
+        # python 2:
+        outlines.append('{}\n'.format(','.join([str(N), str(v)] + [x for x in k])))
 
     # make output directory
-    os.makedirs(os.path.split(opts.outfile)[0], exist_ok=True)
+    # python 3:
+    # os.makedirs(os.path.split(opts.outfile)[0], exist_ok=True)
+
+    # python 2:
+    if not os.path.exists(os.path.dirname(opts.outfile)):
+        os.makedirs(os.path.dirname(opts.outfile))
 
     with open(opts.outfile, 'w') as outf:
-        outf.writelines(outlines)
+        outf.writelines(sorted(outlines, reversed=True))

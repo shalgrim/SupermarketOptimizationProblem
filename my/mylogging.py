@@ -11,7 +11,13 @@ def config_root_file_logger(logfn='', loglevel=logging.WARNING, logmode='a'):
     @param - logmode - logging mode: [w]rite or [a]ppend
     Configures how root logger logs to file
     """
-    if logfn: os.makedirs(os.path.dirname(logfn), exist_ok=True)
+    # TODO: Make code detect python 2 or 3
+    # TODO: test logging
+    # python 3:
+    # if logfn: os.makedirs(os.path.dirname(logfn), exist_ok=True)
+    # python 2:
+    if logfn and not os.path.exists(os.path.dirname(logfn)):
+        os.makedirs(os.path.dirname(logfn))
     logging.basicConfig(filename=logfn, level=loglevel, filemode=logmode,
                         format='%(levelname) -10s %(asctime)s %(module)s ' + \
                             'line: %(lineno)d: %(message)s')
