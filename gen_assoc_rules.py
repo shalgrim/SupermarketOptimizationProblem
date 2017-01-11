@@ -45,6 +45,8 @@ def solve_with_index(lines, N, sigma):
     """
     Create an index for each item showing lines its on. Use those sets to find
     co-occurrences
+    If this weren't so slow I could generalize to generate sufficent_n in a
+    loop instead of explicitly doing singles, pairs, and trips
     :param lines: the lines representing the transactions
     :param N: the size of the co-occurrence set
     :param sigma: the number of times set needs to co-occur
@@ -79,8 +81,8 @@ def solve_with_index(lines, N, sigma):
     sufficient_trips = {}
     for p1, p2 in pairs_to_compare:
         isect = sufficient_pairs[p1].intersection(sufficient_pairs[p2])
-        if len(isect >= sigma):
-            trip = tuple(set(p1).intersection(p2))
+        if len(isect) >= sigma:
+            trip = tuple(sorted(list(set(p1).union(p2))))
             sufficient_trips[trip] = isect
 
     # convert to counts instead of line numbers
