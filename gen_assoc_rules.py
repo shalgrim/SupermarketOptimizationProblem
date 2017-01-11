@@ -140,14 +140,18 @@ if __name__ == '__main__':
     sigma_counts = solve(lines, N, opts.sigma, method=opts.method)
 
     # output
-    outlines = ['{}\n'.format(','.join([str(N), str(v)] + [x for x in k]))
+    outlines = ['{}\n'.format(','.join([str(len(k)), str(v)] + [x for x in k]))
                 for k, v in sigma_counts.items()]
 
     if not os.path.exists(os.path.dirname(opts.outfile)):
         os.makedirs(os.path.dirname(opts.outfile))
 
-    # sort output lines by secondary key, the set asciibetically
+    # sort output lines by tertiary key, the set asciibetically
     outlines = sorted(outlines, key=lambda x: x.split(',')[2:])
+
+    # now sort by secondary key, with largest sets at top
+    outlines = sorted(outlines, key=lambda x: int(x.split(',')[0]),
+                      reverse=True)
 
     # now sort by primary key, with most common sets at top
     outlines = sorted(outlines, key=lambda x: int(x.split(',')[1]),
