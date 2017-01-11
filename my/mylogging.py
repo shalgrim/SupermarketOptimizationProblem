@@ -1,3 +1,4 @@
+"""logging convenience function"""
 import logging
 import os
 
@@ -6,16 +7,11 @@ logger = logging.getLogger('supermarket_optimization.my.myargparse')
 
 def config_root_file_logger(logfn='', loglevel=logging.WARNING, logmode='a'):
     """
-    @param - logfn - logging filename
-    @param - loglevel - level at and above which to log messages
-    @param - logmode - logging mode: [w]rite or [a]ppend
     Configures how root logger logs to file
+    :param logfn: - logging filename
+    :param loglevel: - level at and above which to log messages
+    :param logmode: - logging mode: [w]rite or [a]ppend
     """
-    # TODO: Make code detect python 2 or 3
-    # TODO: test logging
-    # python 3:
-    # if logfn: os.makedirs(os.path.dirname(logfn), exist_ok=True)
-    # python 2:
     if logfn and not os.path.exists(os.path.dirname(logfn)):
         os.makedirs(os.path.dirname(logfn))
     logging.basicConfig(filename=logfn, level=loglevel, filemode=logmode,
