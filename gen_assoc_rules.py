@@ -23,17 +23,21 @@ def solve_with_brute_force(lines, N, sigma):
              co-occurring set and whose values are the number of times those
              sets co-occur
     """
-    # The generator here is less readable than a nested loop, but my
-    # performance tests revealed it was 30% faster than a nested loop
-    #
-    # Explained:
+
     # 1) combinations gives me every N-sized set of items per line
     # 2) Counter creates a dict that counts the number of  co-occurrences of
     #  each set
     # 3) tuple(sorted(list(combo)) makes sure the tuple representing the set
     #  is sorted so that I don't have more than one key with the same item
-    counts = Counter(tuple(sorted(list(combo))) for line in lines
-                      for combo in combinations(line.strip().split(), N))
+    # counts = Counter(tuple(sorted(list(combo))) for line in lines
+    #                   for combo in combinations(line.strip().split(), N))
+
+    counts = Counter()
+    for line_num, line in enumerate(lines):
+        if line_num%1000 == 0: logger.info('processing line {}'.format(line_num))
+        items = line.strip().split()
+        for i in range(N, len(items)+1):
+            counts += Counter(tuple(sorted(list(combo))) for combo in combinations(items, i))
 
     # reduce counts to only those combos that co-occured sigma or more times
     retval = {k: v for k, v in counts.items() if v >= sigma}
