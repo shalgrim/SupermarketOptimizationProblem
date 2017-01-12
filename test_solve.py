@@ -31,10 +31,7 @@ ANSWER_KEY = {
 
 
 class TestSolve(TestCase):
-    def test_solve_brute_force(self):
-        retval = solve(IN_LINES, 3, 4, 'brute_force')
+    def test_solve_toy(self):
+        retval = solve(IN_LINES, 3, 4)
         self.assertEqual(retval, ANSWER_KEY[3][4])
 
-    def test_solve_index(self):
-        retval = solve(IN_LINES, 3, 4, 'index')
-        self.assertEqual(retval, ANSWER_KEY[3][4])
